@@ -1,0 +1,201 @@
+:root {
+  --sn-ink: #1f1b16;
+  --sn-cream: #f7f3ec;
+  --sn-amber: #f2a900;
+  --sn-amber-dark: #d18f00;
+  --sn-green: #1e6b52;
+  --sn-muted: #e9e4dc;
+  --bs-body-font-family: 'DM Sans', system-ui, sans-serif;
+  --bs-body-bg: var(--sn-cream);
+  --bs-body-color: var(--sn-ink);
+  --bs-link-color-rgb: 30, 107, 82;
+  --bs-link-hover-color-rgb: 20, 80, 60;
+}
+
+h1, h2, .brand, .section-title, .hero-title, .stat-value {
+  font-family: 'DM Serif Display', Georgia, serif;
+  font-weight: 400;
+}
+
+/* ---------- Navbar / footer ---------- */
+.app-navbar {
+  background: var(--sn-ink);
+}
+.app-navbar .brand {
+  font-size: 1.4rem;
+}
+.app-navbar .nav-link.active {
+  color: var(--sn-amber) !important;
+}
+.app-footer {
+  background: var(--sn-ink);
+  color: #cfc7ba;
+}
+
+/* ---------- Botones ---------- */
+.btn-accent {
+  --bs-btn-bg: var(--sn-amber);
+  --bs-btn-border-color: var(--sn-amber);
+  --bs-btn-color: var(--sn-ink);
+  --bs-btn-hover-bg: var(--sn-amber-dark);
+  --bs-btn-hover-border-color: var(--sn-amber-dark);
+  --bs-btn-hover-color: var(--sn-ink);
+  --bs-btn-active-bg: var(--sn-amber-dark);
+  --bs-btn-active-border-color: var(--sn-amber-dark);
+  --bs-btn-disabled-bg: var(--sn-amber);
+  --bs-btn-disabled-border-color: var(--sn-amber);
+  font-weight: 500;
+}
+
+/* ---------- Hero ---------- */
+.hero {
+  position: relative;
+  min-height: 70vh;
+  display: flex;
+  align-items: center;
+  color: #fff;
+  background:
+    linear-gradient(90deg, rgba(20, 16, 12, 0.85) 0%, rgba(20, 16, 12, 0.45) 60%, rgba(20, 16, 12, 0.2) 100%),
+    url('https://images.unsplash.com/photo-1510915361894-db8b60106cb1?w=1800&q=80&fit=crop') center / cover;
+}
+.hero-content {
+  padding-block: 4rem;
+}
+.hero-kicker {
+  color: var(--sn-amber);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+.hero-title {
+  font-size: clamp(2.4rem, 6vw, 4.5rem);
+  line-height: 1.05;
+  margin-bottom: 1rem;
+}
+.hero-sub {
+  max-width: 34rem;
+  font-size: 1.15rem;
+  opacity: 0.9;
+  margin-bottom: 2rem;
+}
+
+.section-title {
+  font-size: 2rem;
+}
+
+.category-chip {
+  padding: 0.5rem 1rem;
+  border-radius: 999px;
+  background: #fff;
+  border: 1px solid var(--sn-muted);
+  color: var(--sn-ink);
+  text-decoration: none;
+  transition: background 0.15s, border-color 0.15s;
+}
+.category-chip:hover {
+  background: var(--sn-amber);
+  border-color: var(--sn-amber);
+  color: var(--sn-ink);
+}
+
+/* ---------- Tarjetas ---------- */
+.post-card {
+  border: 1px solid var(--sn-muted);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+.post-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 24px rgba(31, 27, 22, 0.1);
+}
+.post-card-img-wrap {
+  position: relative;
+  display: block;
+  flex-shrink: 0;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background: var(--sn-muted);
+}
+.post-card-img-wrap img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 0;
+}
+.post-card-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  text-transform: capitalize;
+}
+.post-card .card-title a {
+  color: inherit;
+  text-decoration: none;
+}
+.price {
+  font-weight: 700;
+  color: var(--sn-green);
+}
+
+/* ---------- Auth ---------- */
+.auth-card {
+  border: 0;
+  border-radius: 14px;
+  box-shadow: 0 10px 30px rgba(31, 27, 22, 0.12);
+}
+.auth-card-amber {
+  background: var(--sn-amber);
+  color: var(--sn-ink);
+}
+.auth-card-green {
+  background: var(--sn-green);
+  color: #fff;
+}
+.auth-card hr {
+  opacity: 0.2;
+}
+
+/* ---------- Perfil ---------- */
+.profile-sidebar {
+  background: var(--sn-ink);
+  color: #fff;
+  border-radius: 12px;
+}
+.profile-sidebar .nav-link {
+  color: #e6dfd3;
+  border-radius: 8px;
+}
+.profile-sidebar .nav-link:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+.profile-sidebar .nav-link.active {
+  background: var(--sn-amber);
+  color: var(--sn-ink);
+}
+.stat-card {
+  border: 1px solid var(--sn-muted);
+}
+.stat-card:hover {
+  border-color: var(--sn-amber);
+}
+.stat-value {
+  font-size: 2.5rem;
+  line-height: 1;
+}
+
+/* ---------- Detalle ---------- */
+.detail-img {
+  border-radius: 14px;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  background: var(--sn-muted);
+}
+.map {
+  height: 240px;
+  border: 0;
+  border-radius: 12px;
+}

@@ -1,0 +1,423 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Hito 1 · Diseño y prototipo · Segunda Nota</title>
+<style>
+  @page { size: A4; margin: 14mm; }
+  * { box-sizing: border-box; }
+  body { font-family: -apple-system, 'Helvetica Neue', Arial, sans-serif; color: #1f1b16; font-size: 11.5px; line-height: 1.45; margin: 0; }
+  h1 { font-size: 26px; margin: 0 0 4px; }
+  h2 { font-size: 18px; border-bottom: 3px solid #f2a900; padding-bottom: 4px; margin: 0 0 12px; }
+  h3 { font-size: 13px; margin: 14px 0 6px; }
+  .page { page-break-after: always; }
+  .page:last-child { page-break-after: auto; }
+  .muted { color: #6b645a; }
+  .cover { height: 250mm; display: flex; flex-direction: column; justify-content: center; }
+  .cover .tag { color: #d18f00; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
+
+  /* Wireframes */
+  .wf-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .wf { border: 1.5px solid #333; border-radius: 4px; overflow: hidden; break-inside: avoid; }
+  .wf-title { background: #333; color: #fff; font-weight: 700; padding: 4px 8px; font-size: 11px; display: flex; justify-content: space-between; }
+  .wf-title .pill { font-weight: 400; background: #f2a900; color: #1f1b16; border-radius: 8px; padding: 0 6px; font-size: 9.5px; }
+  .wf-title .pill.priv { background: #e06c5c; color: #fff; }
+  .wf-body { padding: 6px; background: #fff; height: 200px; display: flex; flex-direction: column; gap: 5px; }
+  .b { background: #e6e6e6; border: 1px dashed #999; border-radius: 3px; display: flex; align-items: center; justify-content: center; text-align: center; font-size: 9.5px; color: #444; padding: 2px; }
+  .nav { height: 18px; justify-content: space-between; padding: 0 6px; }
+  .row { display: flex; gap: 5px; }
+  .f1 { flex: 1; } .f2 { flex: 2; } .f3 { flex: 3; }
+  .dark { background: #cfcfcf; }
+
+  /* Navegación */
+  .navmap { display: grid; grid-template-columns: 1fr; gap: 10px; }
+  .zone { border: 2px dashed; border-radius: 8px; padding: 10px 12px 14px; }
+  .zone.pub { border-color: #d18f00; background: #fff8e6; }
+  .zone.priv { border-color: #c0392b; background: #fdeeec; }
+  .zone-label { font-weight: 700; font-size: 12px; margin-bottom: 8px; }
+  .nodes { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+  .node { background: #fff; border: 1.5px solid #333; border-radius: 5px; padding: 5px 9px; font-weight: 600; }
+  .node code { display: block; font-weight: 400; color: #6b645a; font-size: 9.5px; }
+  .arrow { color: #6b645a; font-size: 14px; }
+
+  table { border-collapse: collapse; width: 100%; margin-bottom: 8px; }
+  th, td { border: 1px solid #ccc; padding: 4px 6px; text-align: left; vertical-align: top; }
+  th { background: #f4efe6; }
+  code, pre { font-family: Menlo, Consolas, monospace; font-size: 9.8px; }
+  .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+  /* ER */
+  .er { display: grid; grid-template-columns: 1fr 1fr; gap: 18px 40px; }
+  .ent { border: 1.5px solid #333; border-radius: 4px; break-inside: avoid; }
+  .ent-h { background: #1f1b16; color: #fff; font-weight: 700; padding: 4px 8px; }
+  .ent table { margin: 0; }
+  .ent td { border: 0; border-top: 1px solid #ddd; padding: 3px 8px; }
+  .k { width: 34px; font-weight: 700; color: #d18f00; }
+
+  /* API */
+  .ep { border: 1px solid #ddd; border-radius: 6px; margin-bottom: 8px; break-inside: avoid; }
+  .ep-h { padding: 4px 8px; background: #f4efe6; display: flex; gap: 8px; align-items: center; }
+  .m { font-weight: 700; color: #fff; border-radius: 3px; padding: 1px 6px; font-size: 9.5px; font-family: Menlo, monospace; }
+  .GET { background: #1e6b52; } .POST { background: #d18f00; } .PUT { background: #3b6fb6; } .DELETE { background: #c0392b; }
+  .lock { margin-left: auto; font-size: 9.5px; color: #c0392b; font-weight: 700; }
+  .ep pre { margin: 0; padding: 6px 8px; background: #1f1b16; color: #f3ead8; white-space: pre-wrap; }
+  .ep .grid2 { display: grid; grid-template-columns: 1fr 1fr; }
+  .ep .grid2 pre:first-child { border-right: 1px solid #444; }
+</style>
+</head>
+<body>
+
+<!-- PORTADA -->
+<section class="page cover">
+  <div class="tag">Proyecto final · Marketplace</div>
+  <h1 style="font-size:44px">🎸 Segunda Nota</h1>
+  <p style="font-size:16px;max-width:130mm">Marketplace para comprar y vender instrumentos musicales usados, directo entre músicos.</p>
+  <h3 style="margin-top:30px">Hito 1: Diseño y prototipo</h3>
+  <ol>
+    <li>Boceto de las vistas</li>
+    <li>Navegación entre vistas (públicas y privadas)</li>
+    <li>Dependencias del proyecto</li>
+    <li>Tablas de la base de datos y relaciones</li>
+    <li>Contrato de datos de la API REST</li>
+  </ol>
+  <p class="muted" style="margin-top:30px">Integrante: Ignacio Robles</p>
+</section>
+
+<!-- 1. WIREFRAMES -->
+<section class="page">
+  <h2>1. Boceto de las vistas</h2>
+  <div class="wf-grid">
+
+    <div class="wf"><div class="wf-title">Página principal <code>/</code><span class="pill">pública</span></div>
+      <div class="wf-body">
+        <div class="b nav dark"><span>🎸 Logo</span><span>[Iniciar sesión] [Regístrate]</span></div>
+        <div class="b dark" style="height:70px">Hero: imagen de fondo + título "Tu próximo instrumento ya tiene historia" + botones CTA</div>
+        <div class="row"><div class="b f1">Guitarras</div><div class="b f1">Bajos</div><div class="b f1">Baterías</div><div class="b f1">Teclados</div><div class="b f1">…</div></div>
+        <div class="row f1"><div class="b f1">Card</div><div class="b f1">Card</div><div class="b f1">Card</div><div class="b f1">Card</div></div>
+        <div class="b" style="height:18px">Footer</div>
+      </div></div>
+
+    <div class="wf"><div class="wf-title">Registro de usuarios <code>/registro</code><span class="pill">pública</span></div>
+      <div class="wf-body">
+        <div class="b nav dark"><span>🎸 Logo</span><span>[Iniciar sesión] [Regístrate]</span></div>
+        <div style="flex:1;display:flex;justify-content:center">
+          <div style="width:65%;display:flex;flex-direction:column;gap:4px;border:1.5px solid #333;padding:6px;border-radius:4px">
+            <b>Segunda Nota · Crear una cuenta</b>
+            <div class="b">Nombre</div><div class="b">Email</div>
+            <div class="row"><div class="b f1">Contraseña</div><div class="b f1">Repetir</div></div>
+            <div class="b">URL foto (opcional)</div>
+            <div class="row"><div class="b dark" style="width:70px">Registrarme</div><div class="b" style="width:50px">Volver</div></div>
+          </div></div>
+      </div></div>
+
+    <div class="wf"><div class="wf-title">Inicio de sesión <code>/login</code><span class="pill">pública</span></div>
+      <div class="wf-body">
+        <div class="b nav dark"><span>🎸 Logo</span><span>[Iniciar sesión] [Regístrate]</span></div>
+        <div style="flex:1;display:flex;justify-content:center;align-items:center">
+          <div style="width:65%;display:flex;flex-direction:column;gap:4px;border:1.5px solid #333;padding:6px;border-radius:4px">
+            <b>Segunda Nota · Iniciar sesión</b>
+            <div class="b">Email</div><div class="b">Contraseña</div>
+            <div class="row"><div class="b dark" style="width:80px">Iniciar sesión</div><div class="b" style="width:50px">Volver</div></div>
+            <div class="muted" style="font-size:9px">¿No tienes cuenta? Regístrate</div>
+          </div></div>
+      </div></div>
+
+    <div class="wf"><div class="wf-title">Mi perfil <code>/perfil</code><span class="pill priv">privada</span></div>
+      <div class="wf-body">
+        <div class="b nav dark"><span>🎸 Logo · Tienda · Vender</span><span>(foto) Nombre [Cerrar sesión]</span></div>
+        <div class="row f1">
+          <div class="b dark" style="width:30%;flex-direction:column">(foto)<br>Nombre<br><br>Mi perfil<br>Mis publicaciones<br>Mis favoritos<br>+ Nueva publicación</div>
+          <div class="f1" style="display:flex;flex-direction:column;gap:5px">
+            <div class="b" style="height:22px">"¡Hola, Camila!"</div>
+            <div class="b" style="height:50px">Datos: nombre, email, miembro desde</div>
+            <div class="row"><div class="b f1" style="height:40px">N° publicaciones</div><div class="b f1">N° favoritos</div></div>
+            <div class="b dark" style="width:110px;height:18px">+ Publicar</div>
+          </div></div>
+      </div></div>
+
+    <div class="wf"><div class="wf-title">Formulario crear publicación <code>/perfil/nueva</code><span class="pill priv">privada</span></div>
+      <div class="wf-body">
+        <div class="b nav dark"><span>🎸 Logo · Tienda · Vender</span><span>(foto) Nombre [Cerrar sesión]</span></div>
+        <div class="row f1">
+          <div class="b dark" style="width:22%">Menú perfil</div>
+          <div class="f2" style="display:flex;flex-direction:column;gap:4px">
+            <div class="b">Título</div>
+            <div class="row"><div class="b f1">Categoría ▾</div><div class="b f1">Estado ▾</div></div>
+            <div class="row"><div class="b f1">Precio $</div><div class="b f1">Ubicación</div></div>
+            <div class="b">URL imagen</div><div class="b f1">Descripción</div>
+            <div class="b dark" style="width:60px">Publicar</div>
+          </div>
+          <div class="b f1">Vista previa de la card en vivo</div>
+        </div>
+      </div></div>
+
+    <div class="wf"><div class="wf-title">Galería de publicaciones <code>/tienda</code><span class="pill priv">privada</span></div>
+      <div class="wf-body">
+        <div class="b nav dark"><span>🎸 Logo · Tienda · Vender</span><span>(foto) Nombre [Cerrar sesión]</span></div>
+        <div class="row"><div class="b f2">🔎 Buscar por nombre</div><div class="b f1">Categoría ▾</div><div class="b f1">Ordenar por ▾</div></div>
+        <div class="row f1"><div class="b f1">Imagen<br>Título<br>$ precio<br>♡</div><div class="b f1">Imagen<br>Título<br>$ precio<br>♡</div><div class="b f1">Imagen<br>Título<br>$ precio<br>♡</div><div class="b f1">Imagen<br>Título<br>$ precio<br>♡</div></div>
+        <div class="row f1"><div class="b f1">Card</div><div class="b f1">Card</div><div class="b f1">Card</div><div class="b f1">Card</div></div>
+      </div></div>
+
+    <div class="wf"><div class="wf-title">Detalle de publicación <code>/publicacion/:id</code><span class="pill priv">privada</span></div>
+      <div class="wf-body">
+        <div class="b nav dark"><span>🎸 Logo · Tienda · Vender</span><span>(foto) Nombre [Cerrar sesión]</span></div>
+        <div class="row f1">
+          <div class="b dark f1">Imagen de la publicación</div>
+          <div class="f1" style="display:flex;flex-direction:column;gap:4px">
+            <div class="b">Categoría · Estado</div>
+            <div class="b">Título + $ precio</div>
+            <div class="b" style="height:30px">Descripción</div>
+            <div class="row"><div class="b dark f1">✉️ Mensaje al vendedor</div><div class="b" style="width:40px">♡</div></div>
+            <div class="b">Vendedor (foto + nombre)</div>
+            <div class="b f1">Mapa</div>
+          </div></div>
+      </div></div>
+
+    <div class="wf"><div class="wf-title">Mis publicaciones / Mis favoritos<span class="pill priv">privada</span></div>
+      <div class="wf-body">
+        <div class="b nav dark"><span>🎸 Logo · Tienda · Vender</span><span>(foto) Nombre [Cerrar sesión]</span></div>
+        <div class="row f1">
+          <div class="b dark" style="width:22%">Menú perfil</div>
+          <div class="f1" style="display:flex;flex-direction:column;gap:5px">
+            <div class="b" style="height:20px">Título + [+ Nueva]</div>
+            <div class="row f1"><div class="b f1">Card<br>[Eliminar]</div><div class="b f1">Card<br>[Eliminar]</div><div class="b f1">Card<br>[Eliminar]</div></div>
+            <div class="row f1"><div class="b f1">Card ♥</div><div class="b f1">Card ♥</div><div class="b f1">Card ♥</div></div>
+          </div></div>
+      </div></div>
+  </div>
+</section>
+
+<!-- 2. NAVEGACIÓN -->
+<section class="page">
+  <h2>2. Navegación entre vistas</h2>
+  <div class="navmap">
+    <div class="zone pub">
+      <div class="zone-label">🔓 Sección pública (sin sesión)</div>
+      <div class="nodes">
+        <div class="node">Página principal<code>/</code></div><span class="arrow">→</span>
+        <div class="node">Regístrate<code>/registro</code></div>
+        <div class="node">Iniciar sesión<code>/login</code></div>
+        <span class="muted">· 404 <code>*</code> también es pública</span>
+      </div>
+    </div>
+    <div style="text-align:center" class="muted">⬇ login exitoso: se guarda el token JWT en localStorage y el usuario en AuthContext ⬇</div>
+    <div class="zone priv">
+      <div class="zone-label">🔒 Sección privada (requiere sesión, protegida por &lt;PrivateRoute&gt;)</div>
+      <div class="nodes" style="margin-bottom:8px">
+        <div class="node">Tienda<code>/tienda</code></div><span class="arrow">→</span>
+        <div class="node">Detalle de publicación<code>/publicacion/:id</code></div>
+      </div>
+      <div class="nodes">
+        <div class="node">Perfil<code>/perfil</code></div><span class="arrow">→</span>
+        <div class="node">Mis publicaciones<code>/perfil/publicaciones</code></div>
+        <div class="node">Mis favoritos<code>/perfil/favoritos</code></div>
+        <div class="node">Nueva publicación<code>/perfil/nueva</code></div>
+      </div>
+    </div>
+  </div>
+
+  <h3>Reglas de navegación</h3>
+  <ul>
+    <li>Si un usuario <b>sin sesión</b> entra a una ruta privada, se le redirige a <code>/login</code> y, al iniciar sesión, vuelve a la página que quería ver.</li>
+    <li>Si un usuario <b>con sesión</b> entra a <code>/login</code> o <code>/registro</code>, se le redirige a <code>/tienda</code>.</li>
+    <li>El navbar cambia según la sesión: sin sesión muestra [Iniciar sesión] [Regístrate]; con sesión muestra Tienda, Vender, su foto/nombre y [Cerrar sesión].</li>
+    <li>Datos de sesión en el frontend: <code>token</code> (localStorage) y <code>user = { id, name, email, picture }</code> (AuthContext). Los favoritos del usuario viven en FavoritesContext.</li>
+  </ul>
+
+  <h2 style="margin-top:22px">3. Dependencias del proyecto</h2>
+  <div class="cols">
+    <div>
+      <h3>Frontend (React + Vite)</h3>
+      <table>
+        <tr><th>Paquete</th><th>Uso</th></tr>
+        <tr><td><code>react</code>, <code>react-dom</code></td><td>Librería de interfaz</td></tr>
+        <tr><td><code>vite</code></td><td>Creación del proyecto y servidor de desarrollo</td></tr>
+        <tr><td><code>react-router-dom</code></td><td>Navegación entre vistas, rutas privadas</td></tr>
+        <tr><td><code>bootstrap</code></td><td>Framework CSS</td></tr>
+        <tr><td><code>react-bootstrap</code></td><td>Componentes Bootstrap para React</td></tr>
+        <tr><td><code>axios</code></td><td>Consumo de la API REST, envío del token</td></tr>
+        <tr><td><code>eslint</code> (dev)</td><td>Calidad de código</td></tr>
+      </table>
+    </div>
+    <div>
+      <h3>Backend (Node + Express)</h3>
+      <table>
+        <tr><th>Paquete</th><th>Uso</th></tr>
+        <tr><td><code>express</code></td><td>Servidor y rutas de la API REST</td></tr>
+        <tr><td><code>pg</code></td><td>Conexión y consultas a PostgreSQL</td></tr>
+        <tr><td><code>jsonwebtoken</code></td><td>Autenticación y autorización con JWT</td></tr>
+        <tr><td><code>bcryptjs</code></td><td>Encriptar contraseñas</td></tr>
+        <tr><td><code>cors</code></td><td>Permitir consultas de otros orígenes</td></tr>
+        <tr><td><code>dotenv</code></td><td>Variables de entorno (.env)</td></tr>
+        <tr><td><code>jest</code>, <code>supertest</code> (dev)</td><td>Tests de rutas</td></tr>
+        <tr><td><code>nodemon</code> (dev)</td><td>Reinicio automático en desarrollo</td></tr>
+      </table>
+    </div>
+  </div>
+  <p class="muted">Base de datos: PostgreSQL. Despliegue: Netlify (frontend) y Render (backend + base de datos).</p>
+</section>
+
+<!-- 4. BASE DE DATOS -->
+<section class="page">
+  <h2>4. Tablas de la base de datos y relaciones</h2>
+  <svg width="100%" viewBox="0 0 700 320" style="margin-bottom:6px" font-family="Menlo, monospace" font-size="10">
+    <defs>
+      <marker id="many" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="12" markerHeight="12" orient="auto"><path d="M0,6 L11,0 M0,6 L11,6 M0,6 L11,12" stroke="#333" fill="none"/></marker>
+    </defs>
+    <!-- users -->
+    <g transform="translate(20,20)">
+      <rect width="190" height="120" fill="#fff" stroke="#333" stroke-width="1.5"/>
+      <rect width="190" height="20" fill="#1f1b16"/><text x="8" y="14" fill="#fff" font-weight="700">users</text>
+      <text x="8" y="36"><tspan fill="#d18f00" font-weight="700">PK</tspan> id SERIAL</text>
+      <text x="8" y="52">   name VARCHAR(100)</text>
+      <text x="8" y="68">   email VARCHAR UNIQUE</text>
+      <text x="8" y="84">   password VARCHAR (hash)</text>
+      <text x="8" y="100">   picture TEXT</text>
+      <text x="8" y="116">   created_at TIMESTAMP</text>
+    </g>
+    <!-- posts -->
+    <g transform="translate(410,20)">
+      <rect width="250" height="200" fill="#fff" stroke="#333" stroke-width="1.5"/>
+      <rect width="250" height="20" fill="#1f1b16"/><text x="8" y="14" fill="#fff" font-weight="700">posts</text>
+      <text x="8" y="36"><tspan fill="#d18f00" font-weight="700">PK</tspan> id SERIAL</text>
+      <text x="8" y="52"><tspan fill="#3b6fb6" font-weight="700">FK</tspan> user_id → users.id</text>
+      <text x="8" y="68"><tspan fill="#3b6fb6" font-weight="700">FK</tspan> category_id → categories.id</text>
+      <text x="8" y="84">   title VARCHAR(120)</text>
+      <text x="8" y="100">   description TEXT</text>
+      <text x="8" y="116">   price INT (≥ 0)</text>
+      <text x="8" y="132">   image_url TEXT</text>
+      <text x="8" y="148">   condition (nuevo|como nuevo|usado)</text>
+      <text x="8" y="164">   location VARCHAR(100)</text>
+      <text x="8" y="180">   created_at TIMESTAMP</text>
+    </g>
+    <!-- favorites -->
+    <g transform="translate(20,200)">
+      <rect width="190" height="88" fill="#fff" stroke="#333" stroke-width="1.5"/>
+      <rect width="190" height="20" fill="#1f1b16"/><text x="8" y="14" fill="#fff" font-weight="700">favorites</text>
+      <text x="8" y="36"><tspan fill="#d18f00" font-weight="700">PK</tspan> id SERIAL</text>
+      <text x="8" y="52"><tspan fill="#3b6fb6" font-weight="700">FK</tspan> user_id → users.id</text>
+      <text x="8" y="68"><tspan fill="#3b6fb6" font-weight="700">FK</tspan> post_id → posts.id</text>
+      <text x="8" y="84">   UNIQUE(user_id, post_id)</text>
+    </g>
+    <!-- categories -->
+    <g transform="translate(410,250)">
+      <rect width="250" height="60" fill="#fff" stroke="#333" stroke-width="1.5"/>
+      <rect width="250" height="20" fill="#1f1b16"/><text x="8" y="14" fill="#fff" font-weight="700">categories</text>
+      <text x="8" y="36"><tspan fill="#d18f00" font-weight="700">PK</tspan> id SERIAL</text>
+      <text x="8" y="50">   name VARCHAR UNIQUE</text>
+    </g>
+    <!-- relaciones -->
+    <path d="M210,52 L410,72" stroke="#333" fill="none" marker-end="url(#many)"/>
+    <text x="280" y="52" fill="#6b645a">1 ─ N  publica</text>
+    <path d="M110,140 L110,200" stroke="#333" fill="none" marker-end="url(#many)"/>
+    <text x="116" y="174" fill="#6b645a">1 ─ N  guarda</text>
+    <path d="M410,150 L210,252" stroke="#333" fill="none" marker-end="url(#many)"/>
+    <text x="300" y="186" fill="#6b645a">1 ─ N</text>
+    <path d="M535,250 L535,220" stroke="#333" fill="none" marker-end="url(#many)"/>
+    <text x="542" y="240" fill="#6b645a">1 ─ N</text>
+  </svg>
+  <table>
+    <tr><th>Relación</th><th>Tipo</th><th>Descripción</th></tr>
+    <tr><td>users → posts</td><td>1 a N</td><td>Un usuario publica muchos instrumentos; cada publicación tiene un único vendedor. <code>ON DELETE CASCADE</code>.</td></tr>
+    <tr><td>categories → posts</td><td>1 a N</td><td>Cada publicación pertenece a una categoría (Guitarras, Bajos, Baterías y percusión, Teclados y pianos, Cuerdas frotadas, Otros).</td></tr>
+    <tr><td>users ↔ posts (vía favorites)</td><td>N a N</td><td>Un usuario guarda muchas publicaciones como favoritas y una publicación puede ser favorita de muchos usuarios. La restricción <code>UNIQUE(user_id, post_id)</code> evita duplicados.</td></tr>
+  </table>
+  <p class="muted">El script completo de creación está en <code>backend/db/script.sql</code> (incluido en este .zip).</p>
+</section>
+
+<!-- 5. API -->
+<section class="page">
+  <h2>5. Contrato de datos de la API REST</h2>
+  <p>Base URL: <code>http://localhost:3000</code> (producción: URL de Render). Formato JSON. Las rutas con 🔒 requieren el header <code>Authorization: Bearer &lt;token&gt;</code>; sin token válido responden <code>401</code>. Los errores responden <code>{ message: String }</code>.</p>
+  <p>Objeto <b>Post</b> usado en las respuestas: <code>{ id: Number, title: String, description: String, price: Number, image_url: String, condition: String, location: String, created_at: Date, category_id: Number, category_name: String, seller_id: Number, seller_name: String }</code></p>
+
+  <div class="ep"><div class="ep-h"><span class="m POST">POST</span><code>/users</code> Registrar usuario</div><div class="grid2">
+<pre>// request.body
+{
+  name: String,
+  email: String,
+  password: String,  // mín. 6
+  picture: String    // opcional
+}</pre>
+<pre>// 201 Created
+{ id: Number, name: String,
+  email: String, picture: String }
+// 400 faltan datos · 409 email ya existe</pre></div></div>
+
+  <div class="ep"><div class="ep-h"><span class="m POST">POST</span><code>/login</code> Iniciar sesión</div><div class="grid2">
+<pre>// request.body
+{ email: String, password: String }</pre>
+<pre>// 200 OK
+{ token: String,
+  user: { id, name, email, picture } }
+// 400 faltan datos · 401 credenciales inválidas</pre></div></div>
+
+  <div class="ep"><div class="ep-h"><span class="m GET">GET</span><code>/users/me</code> Datos del usuario logueado<span class="lock">🔒</span></div><div class="grid2">
+<pre>// header Authorization: Bearer token</pre>
+<pre>// 200 OK
+{ id, name, email, picture, created_at }</pre></div></div>
+
+  <div class="ep"><div class="ep-h"><span class="m GET">GET</span><code>/users/me/posts</code> Mis publicaciones<span class="lock">🔒</span></div><div class="grid2">
+<pre>// sin body</pre><pre>// 200 OK
+[ Post, ... ]</pre></div></div>
+
+  <div class="ep"><div class="ep-h"><span class="m GET">GET</span><code>/categories</code> Listar categorías</div><div class="grid2">
+<pre>// sin body</pre><pre>// 200 OK
+[ { id: Number, name: String }, ... ]</pre></div></div>
+
+  <div class="ep"><div class="ep-h"><span class="m GET">GET</span><code>/posts</code> Galería con filtros</div><div class="grid2">
+<pre>// query params (todos opcionales)
+?search=String        // título o descripción
+&amp;category_id=Number
+&amp;order_by=recent|price_asc|price_desc|title_asc
+&amp;limit=Number&amp;page=Number</pre>
+<pre>// 200 OK
+{ total: Number, page: Number,
+  results: [ Post, ... ] }</pre></div></div>
+
+  <div class="ep"><div class="ep-h"><span class="m GET">GET</span><code>/posts/:id</code> Detalle de publicación</div><div class="grid2">
+<pre>// params: id</pre>
+<pre>// 200 OK
+{ ...Post, seller_email: String,
+  seller_picture: String }
+// 404 no existe</pre></div></div>
+
+  <div class="ep"><div class="ep-h"><span class="m POST">POST</span><code>/posts</code> Crear publicación<span class="lock">🔒</span></div><div class="grid2">
+<pre>// request.body
+{ title: String, description: String,
+  price: Number, image_url: String,
+  category_id: Number,
+  condition: String,   // opcional
+  location: String }   // opcional</pre>
+<pre>// 201 Created
+Post
+// 400 faltan datos · 401 sin token</pre></div></div>
+
+  <div class="ep"><div class="ep-h"><span class="m PUT">PUT</span><code>/posts/:id</code> Editar publicación propia<span class="lock">🔒</span></div><div class="grid2">
+<pre>// request.body: campos a cambiar
+{ title?, description?, price?, ... }</pre>
+<pre>// 200 OK  Post
+// 403 no es el dueño · 404 no existe</pre></div></div>
+
+  <div class="ep"><div class="ep-h"><span class="m DELETE">DELETE</span><code>/posts/:id</code> Eliminar publicación propia<span class="lock">🔒</span></div><div class="grid2">
+<pre>// params: id</pre><pre>// 204 No Content
+// 403 no es el dueño · 404 no existe</pre></div></div>
+
+  <div class="ep"><div class="ep-h"><span class="m GET">GET</span><code>/favorites</code> Mis favoritos<span class="lock">🔒</span></div><div class="grid2">
+<pre>// sin body</pre><pre>// 200 OK
+[ Post, ... ]</pre></div></div>
+
+  <div class="ep"><div class="ep-h"><span class="m POST">POST</span><code>/favorites</code> Agregar a favoritos<span class="lock">🔒</span></div><div class="grid2">
+<pre>// request.body
+{ post_id: Number }</pre><pre>// 201 Created
+{ id: Number, user_id: Number, post_id: Number }
+// 400 falta post_id · 404 post no existe</pre></div></div>
+
+  <div class="ep"><div class="ep-h"><span class="m DELETE">DELETE</span><code>/favorites/:postId</code> Quitar de favoritos<span class="lock">🔒</span></div><div class="grid2">
+<pre>// params: postId</pre><pre>// 204 No Content
+// 404 no estaba en favoritos</pre></div></div>
+</section>
+
+</body>
+</html>
